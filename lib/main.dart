@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:flutter_sms_inbox/flutter_sms_inbox.dart';
 
 void main() {
   runApp(const MyApp());
@@ -12,7 +10,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Messages App',
+      title: 'Flutter Demo',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
@@ -29,40 +27,30 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final SmsQuery _query = SmsQuery();
-  List<SmsMessage> messages = [];
+  int _counter = 0;
 
-  @override
-  void initState() {
-    super.initState();
-    _fetchMessages();
-  }
-
-  Future<void> _fetchMessages() async {
-    var status = await Permission.sms.request();
-    if (status.isGranted) {
-      final fetchedMessages = await _query.getAllSms;
-      setState(() {
-        messages = fetchedMessages;
-      });
-    }
+  void _incrementCounter() {
+    setState(() {
+      _counter++;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Messages')),
-      body: messages.isEmpty
-          ? const Center(child: Text('No messages found'))
-          : ListView.builder(
-        itemCount: messages.length,
-        itemBuilder: (context, index) {
-          final message = messages[index];
-          return ListTile(
-            title: Text(message.address ?? 'Unknown'),
-            subtitle: Text(message.body ?? ''),
-          );
-        },
+      appBar: AppBar(title: const Text('Flutter Counter')),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text('You have pushed the button this many times:'),
+            Text('$_counter', style: Theme.of(context).textTheme.headlineMedium),
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _incrementCounter,
+        child: const Icon(Icons.add),
       ),
     );
   }
